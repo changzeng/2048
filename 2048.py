@@ -15,9 +15,11 @@ border = [[0 for i in xrange(border_size[0])] for j in xrange(border_size[1])]
 pygame.init()
 game_font = pygame.font.SysFont("arial",32)
 screen = pygame.display.set_mode(win_size,0,32)
+#initialize screen color	
 screen.fill(win_back)
 pygame.display.update()
 
+#check if border has free room
 def check_lose():
 	global border
 	for item in border:
@@ -34,33 +36,45 @@ def display():
 	global rec_sep
 	global rec_color
 	global game_font
-	if not check_lose():
-		for i,item in enumerate(border):
-			for j,sub_item in enumerate(item):
-				y = i*(rec_size[1] + rec_sep) + rec_sep
-				x = j*(rec_size[0] + rec_sep) + rec_sep
-				pygame.draw.rect(screen,rec_color[border[i][j]],((x,y),rec_size))
-				if border[i][j] != 0:
-					surface = game_font.render(str(border[i][j]),True,(255,255,255))	
-					screen.blit(surface,(x+(rec_size[0]-surface.get_width())/2,y+(rec_size[1]-surface.get_height())/2))
-		pygame.display.update()
+	for i,item in enumerate(border):
+		for j,sub_item in enumerate(item):
+			y = i*(rec_size[1] + rec_sep) + rec_sep
+			x = j*(rec_size[0] + rec_sep) + rec_sep
+			pygame.draw.rect(screen,rec_color[border[i][j]],((x,y),rec_size))
+			if border[i][j] != 0:
+				surface = game_font.render(str(border[i][j]),True,(255,255,255))	
+				screen.blit(surface,(x+(rec_size[0]-surface.get_width())/2,y+(rec_size[1]-surface.get_height())/2))
+	pygame.display.update()
 
-#random a new 2
-def rand_2(x = 1):
+#random a new 2 or 4
+def rand_2(arg = 1):
 	global border
 	global border_size
-	x = randint(0,border_size[0]-1)
-	y = randint(0,border_size[1]-1)
-	while border[x][y] != 0:
-		x = randint(0,border_size[0]-1)
-		y = randint(0,border_size[1]-1)
-	if x == 1:
+	tmp_list = []
+	for i in xrange(border_size[1]):
+		for j in xrange(border_size[0]):
+			if border[i][j] == 0:
+				tmp_list.append((i,j))
+	if len(tmp_list) == 0:
+		return
+	i = randint(0,len(tmp_list)-1)
+	x = tmp_list[i][0]
+	y = tmp_list[i][1]
+	if arg == 1:
 		border[x][y] = 2
 	else:
 		if randint(1,100)>20:
 			border[x][y] = 2
 		else:
 			border[x][y] = 4
+
+def genera_identity():
+	global border
+	s = ""
+	for item in border:
+		for sub_item in item:
+			s += str(sub_item)
+	return s
 
 def init_border():
 	for i in xrange(2):
@@ -170,19 +184,38 @@ while True:
 		elif event.type == KEYDOWN:	
 			if event.key == K_LEFT:
 				print("left")
+				s1 = genera_identity()
                 		left()
+				s2 = genera_identity()
 				display()
+				if s1 != s2:
+					rand_2(2)
+					display()
             		elif event.key == K_RIGHT:
 				print("right")
+				s1 = genera_identity()
                 		right()
+				s2 = genera_identity()
 				display()
-            		elif event.key == K_UP:
+				if s1 != s2:
+					rand_2(2)
+					display()
+			elif event.key == K_UP:
 				print("up")
+				s1 = genera_identity()
                 		up()
+				s2 = genera_identity()
 				display()
+				if s1 != s2:
+					rand_2(2)
+					display()
             		elif event.key == K_DOWN:
 				print("down")
-               			down()
+				s1 = genera_identity()
+                		down()
+				s2 = genera_identity()
 				display()
-			rand_2(2)
-			display()
+				if s1 != s2:
+					rand_2(2)
+					display()
+			print(border[3][3])

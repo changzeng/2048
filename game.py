@@ -15,7 +15,7 @@ rec_color = {0:(204,192,176),2:(239,228,217),4:(236,225,198),8:(249,175,115),16:
 pygame.init()
 game_font = pygame.font.SysFont("arial",32)
 screen = pygame.display.set_mode(win_size,0,32)
-#initialize screen color	
+#initialize screen color
 screen.fill(win_back)
 pygame.display.update()
 
@@ -23,8 +23,8 @@ pygame.display.update()
 class AI_2048():
 	def __init__(self,size):
 		self.border_size = size
-		self.border = [[0 for i in xrange(self.border_size[0])] for j in xrange(self.border_size[1])]
-		for i in xrange(2):
+		self.border = [[0 for i in range(self.border_size[0])] for j in range(self.border_size[1])]
+		for i in range(2):
 			self.rand_2()
 
 	#check if border has free room
@@ -52,15 +52,15 @@ class AI_2048():
 					if self.border[i][j] == 2 or self.border[i][j] == 4:
 						surface = game_font.render(str(self.border[i][j]),True,(124,115,105))
 					else:
-						surface = game_font.render(str(self.border[i][j]),True,(255,255,255))	
+						surface = game_font.render(str(self.border[i][j]),True,(255,255,255))
 					screen.blit(surface,(x+(rec_size[0]-surface.get_width())/2,y+(rec_size[1]-surface.get_height())/2))
 		pygame.display.update()
 
 	#random a new 2 or 4
 	def rand_2(self,arg = 1):
 		tmp_list = []
-		for i in xrange(self.border_size[1]):
-			for j in xrange(self.border_size[0]):
+		for i in range(self.border_size[1]):
+			for j in range(self.border_size[0]):
 				if self.border[i][j] == 0:
 					tmp_list.append((i,j))
 		if len(tmp_list) == 0:
@@ -84,9 +84,9 @@ class AI_2048():
 		return s
 
 	def up(self):
-		for i in xrange(self.border_size[0]):
+		for i in range(self.border_size[0]):
 			tmp = 0
-			for j in xrange(1,self.border_size[1]):
+			for j in range(1,self.border_size[1]):
 				if self.border[j][i] == 0:
 						continue
 
@@ -104,9 +104,9 @@ class AI_2048():
 							self.border[j][i] = 0
 
 	def down(self):
-		for i in xrange(self.border_size[0]):
+		for i in range(self.border_size[0]):
 			tmp = self.border_size[1]-1
-			for j in xrange(self.border_size[1]-2,-1,-1):
+			for j in range(self.border_size[1]-2,-1,-1):
 				if self.border[j][i] == 0:
 						continue
 
@@ -124,9 +124,9 @@ class AI_2048():
 							self.border[j][i] = 0
 
 	def right(self):
-		for i in xrange(self.border_size[1]):
+		for i in range(self.border_size[1]):
 			tmp = self.border_size[0]-1
-			for j in xrange(self.border_size[0]-2,-1,-1):
+			for j in range(self.border_size[0]-2,-1,-1):
 				if self.border[i][j] == 0:
 						continue
 
@@ -144,9 +144,9 @@ class AI_2048():
 							self.border[i][j] = 0
 
 	def left(self):
-		for i in xrange(self.border_size[1]):
+		for i in range(self.border_size[1]):
 			tmp = 0
-			for j in xrange(1,self.border_size[0]):
+			for j in range(1,self.border_size[0]):
 				if self.border[i][j] == 0:
 						continue
 
@@ -169,7 +169,7 @@ class AI_2048():
 				if sub_item == 0:
 					num += 1
 		return num
-	
+
 	def cal_sum(self):
 		num = 0
 		for item in self.border:
@@ -208,7 +208,7 @@ def make_dicision(arg):
 				zero_num = zero_tmp
 				dire = index + 1
 	#num_list = [up_cp.cal_zero_num(),down_cp.cal_zero_num(),right_cp.cal_zero_num(),left_cp.cal_zero_num()]
-	#print(num_list)	
+	#print(num_list)
 	#return num_list.index(max(num_list))+1
 	#sum_list = [up_cp.cal_sum(),down_cp.cal_sum(),right_cp.cal_sum(),left_cp.cal_sum()]
 	#max_sum = max(sum_list)
@@ -216,20 +216,20 @@ def make_dicision(arg):
 
 	return dire
 
-a2048 = AI_2048((4,4))
-a2048.display()
+if __name__ == "__main__":
+    a2048 = AI_2048((4,4))
+    a2048.display()
 
-
-while True:
-	dire = make_dicision(a2048)
-	s1 = a2048.genera_identity()
-	a2048.move(dire)
-	s2 = a2048.genera_identity()
-	if s1 != s2:
-		a2048.rand_2(2)
-	a2048.display()
-	print(dire)
-	sleep(0.1)
+    while True:
+        dire = make_dicision(a2048)
+        s1 = a2048.genera_identity()
+        a2048.move(dire)
+        s2 = a2048.genera_identity()
+        if s1 != s2:
+            a2048.rand_2(2)
+        a2048.display()
+        print(dire)
+        sleep(0.1)
 
 '''
 while True:
@@ -242,7 +242,7 @@ while True:
 			#pygame.draw.rect(screen,(111,222,121),((0,0),rec_size))
 			#display()
 			#pass
-		elif event.type == KEYDOWN:	
+		elif event.type == KEYDOWN:
 			if event.key == K_LEFT:
 				print("left")
 				s1 = a2048.genera_identity()
